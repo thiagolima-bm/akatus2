@@ -1,0 +1,22 @@
+<?php $_code = $this->getMethodCode(); ?>
+
+<ul class="form-list" id="payment_form_akatusboleto" style="display:block;">
+
+    <?php if ($this->boletoDisponivel()): ?>
+
+        <?php if ($this->getMethod()->getConfigData('message') !== ''): ?>
+            <div><?php echo $this->getMethod()->getConfigData('message'); ?></div>
+        <?php endif; ?>
+
+    <?php else: ?>
+
+        <?php $this->avisoConfiguracoes(); ?>
+        <script>
+            $('p_method_<?php echo $_code ?>').writeAttribute('checked', 'checked');
+            $('p_method_<?php echo $_code ?>').writeAttribute('disabled', 'disabled');
+        </script>
+
+    <?php endif; ?>
+
+</ul>
+

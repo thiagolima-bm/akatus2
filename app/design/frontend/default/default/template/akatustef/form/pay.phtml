@@ -1,0 +1,78 @@
+<?php $_code = $this->getMethodCode(); ?>
+
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display: none;">
+
+    <?php if ($this->tefDisponivel()): ?>
+
+        <li>
+            <?php if ($this->getMethod()->getConfigData('message') !== ''): ?>
+                <div><?php echo $this->getMethod()->getConfigData('message'); ?></div>
+            <?php endif; ?>
+
+            <!--<input onClick='ffTef2();' type='radio' value='<?php echo $this->getMeioDePagamento()->descricao; ?>' name='forma' id='forma' disabled >-->
+            <input type='hidden' value='<?php echo $this->getMeioDePagamento()->descricao; ?>' name='forma' id='forma'>
+            <!--<span>Cartao de Debito - <?php echo $this->getMeioDePagamento()->descricao; ?></span>-->
+
+            <div style="display:block" id="tef" name="tef">       
+
+                <table id="tablePay" cellspacing="5" style = 'margin-top:10px; '>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>
+                                <label>
+                                    <select style="width:250px;" name="payment[check_tefbandeira]" id="<?php echo $_code ?>_check_tefbandeira" class="input-text required-entry">
+                                        <?php foreach($this->getBandeirasMeioDePagamento() as $bandeira): ?>
+                                            <option value="<?php echo $bandeira->codigo; ?>"><?php echo $bandeira->descricao; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </label>
+                            </td>
+                        </tr>  
+                    </tbody>
+                </table> 
+            </div>			
+
+        </li>
+
+    <?php else: ?>
+
+        <?php $this->avisoConfiguracoes(); ?>
+
+        <script>
+            $('p_method_<?php echo $_code ?>').writeAttribute('checked', 'checked');
+            $('p_method_<?php echo $_code ?>').writeAttribute('disabled', 'disabled');
+        </script>
+
+    <?php endif; ?>
+
+</ul>
+
+<script>
+    function formatarNumero (rnum) {
+        return "R$ "+ formatamoeda(Math.round(rnum*Math.pow(10,2))/Math.pow(10,2));
+    }
+
+    function formatamoeda(num) {
+        x = 0;
+
+        if(num<0) {
+            num = Math.abs(num);
+            x = 1;
+        }
+
+        if(isNaN(num)) num = "0";
+        cents = Math.floor((num*100+0.5)%100);
+
+        num = Math.floor((num*100+0.5)/100).toString();
+
+        if(cents < 10) cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length-(1+i))/3); i++)
+            num = num.substring(0,num.length-(4*i+3))+'.'
+            +num.substring(num.length-(4*i+3));
+
+        ret = num + ',' + cents;
+
+        if (x == 1) ret = ' - ' + ret;return ret;
+    }
+</script>

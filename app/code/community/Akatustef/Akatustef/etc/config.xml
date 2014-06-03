@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Akatustef_Akatustef>
+            <version>0.1.1</version>
+        </Akatustef_Akatustef>
+    </modules> 
+    <global>
+        <fieldsets>
+            <sales_convert_quote_payment>
+                <check_tefbandeira>
+                    <to_order_payment>*</to_order_payment>
+                </check_tefbandeira>
+                <check_formapagamento>
+                    <to_order_payment>*</to_order_payment>
+                </check_formapagamento>
+            </sales_convert_quote_payment>
+        </fieldsets>
+
+        <sales>
+            <order>
+                <states>
+                    <pending_payment>
+                        <visible_on_front>1</visible_on_front>
+                    </pending_payment>
+                </states>
+            </order>
+        </sales>
+
+        <blocks>
+            <akatustef>
+                <class>Akatustef_Akatustef_Block</class>            
+            </akatustef>
+        </blocks>
+
+        <models>
+            <akatustef>
+                <class>Akatustef_Akatustef_Model</class>
+            </akatustef>
+        </models>
+
+        <resources>
+            <akatustef_setup>
+                <setup>
+                    <module>Akatustef_Akatustef</module>
+                    <class>Akatustef_Akatustef_Model_Resource_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </akatustef_setup>
+            <akatustef_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </akatustef_write>
+            <akatustef_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </akatustef_read>
+        </resources>
+
+        <helpers>
+            <class>Akatustef_Akatustef_Helper</class>
+        </helpers>        
+
+    </global>
+
+    <default>
+        <payment>
+            <akatustef>
+                <active>0</active>
+                <modo>SANDBOX</modo>
+                <model>akatustef/pagar</model>
+                <order_status>pending</order_status>
+                <title>Débito Online</title>
+                <cctypes>AE,VI,MC</cctypes>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+            </akatustef>
+        </payment>
+    </default>
+
+</config>

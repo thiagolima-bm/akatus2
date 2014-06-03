@@ -1,0 +1,407 @@
+<?php $_code=$this->getMethodCode(); ?>
+
+<script src="<?php echo $this->getSkinUrl('akatus/jquery.js') ?>"></script>
+
+<ul class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+
+    <?php if ($this->cartaoDisponivel()): ?>
+
+        <li>
+
+            <?php if ($this->getMethod()->getConfigData('message') !== ''): ?>
+                <div><?php echo $this->getMethod()->getConfigData('message'); ?></div>
+            <?php endif; ?>
+
+            <div style="display:block" id="cc" name="cc">   
+                <sup class="required-sup-info"><span>*</span> campos obrigatórios</sup>
+
+                <div id="tablePay">
+
+                    <div class="full">
+                        <label class="required"><sup>*</sup> Nome no cartão</label>
+                        <div class="data_area">
+                        <input type="text" class="input-text required-entry" id="<?php echo $_code ?>_check_nome" name="payment[check_nome]" value="<?php echo $this->htmlEscape($this->getInfoData('check_nome')) ?>" />
+                        </div>
+                    </div>							
+
+                    <div class="full">
+                        <label class="required"><sup>*</sup> CPF do proprietário do cartão</label>
+                        <div class="data_area">
+                            <input type="text" size="19" name="payment[check_cpf]" id="<?php echo $_code ?>_check_cpf" class="input-text required-entry" onblur="isCPF(this.value);" >
+                        </div>
+                    </div>							
+
+                    <div class="full">
+                        <label class="required"><sup>*</sup> Número do cartão de crédito</label>
+                        <div class="data_area">
+                            <input type="text" maxlength="16" size="16" name="payment[check_numerocartao]" id="<?php echo $_code ?>_check_cartaocredito" onblur="isCreditCard(this.value);" class="input-text required-entry" >
+                        </div>
+                    </div>
+
+                    <div class="full" id='cc_bandeiras'>
+
+                        <?php foreach($this->getBandeirasMeioDePagamento() as $bandeira): ?>
+                            <?php echo "<img id = 'cc_".$bandeira->codigo."' src = '".$this->getSkinUrl('cartoes-colorido/') . $bandeira->codigo.".png' class = 'cc_inactive"; ?>
+                            <?php echo "' onclick = 'selectBandeira29(this.id);'/>"; ?>
+                        <?php endforeach; ?>
+
+                        <div>
+                            <input type="hidden" name="payment[check_cartaobandeira]" id="<?php echo $_code."_check_cartaobandeira"; ?>" class="input-text required-entry" />
+                        </div>
+
+                    </div>							
+
+                    <div class="two_fields">
+
+                        <label class="required"><sup>*</sup> Data de vencimento</label>
+                        <div class='clr'></div>
+                        <div class="short">
+                            <select value="" maxlength="2" size="1" style="width:60px" name="payment[check_expiracaomes]" id="<?php echo $_code ?>_check_expiracaomes" class="input-text required-entry">
+                                <option value="">Mês</option>
+                                <option value="01">01</option>
+                                <option value="02">02</option>
+                                <option value="03">03</option>
+                                <option value="04">04</option>
+                                <option value="05">05</option>
+                                <option value="06">06</option>
+                                <option value="07">07</option>
+                                <option value="08">08</option>
+                                <option value="09">09</option>
+                                <option value="10">10</option>
+                                <option value="11">11</option>
+                                <option value="12">12</option>
+                            </select> 
+                            /									
+                            <select type="text" style="width:60px" value="" maxlength="2" size="1" name="payment[check_expiracaoano]" id="<?php echo $_code ?>_check_expiracaoano" class="input-text required-entry">
+
+                                <option value="">Ano</option>
+
+                                <?php date_default_timezone_set('GMT'); ?>
+                                <?php $currentYear = date("y"); ?>
+                                <?php $lastYear = $currentYear + 10; ?>
+
+                                <?php while ($currentYear < $lastYear): ?>
+                                    <option value="<?php echo $currentYear; ?>"><?php echo $currentYear; ?></option>
+                                    <?php $currentYear++; ?>
+                                <?php endwhile; ?>
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class='clr'></div><br>
+
+                    <div class="full secure-code">
+                        <label class="required"><sup>*</sup> Código de Segurança</label>
+                        <div class='clr'></div>
+                        <input type="text" size="1" maxlength="4" style="width:30px !important; margin-right: 5px;" name="payment[check_codseguranca]" id="<?php echo $_code ?>_check_codseguranca" class="input-text required-entry">
+                        <ul id="tipsul" style="float: left;">
+                            <li id="tipsli" onMouseover="javascript:imagePreview();"><a onClick="return false;" id="overlink" href="<?php echo $this->getSkinUrl('cvv/')."cvv.jpg";?>" class="preview" title="Esse é o codigo de segurança.">O que é isso?</a></li>
+                        </ul>
+                    </div>
+
+                    <br>
+                    <div class='clr'></div>								
+
+                    <div class="full">
+                        <label class="required"><sup>*</sup> Número de parcelas</label>
+                        <select name="payment[check_parcelamento]" id="<?php echo $_code ?>_check_parcelamento" class="input-text required-entry">
+
+                            <?php foreach($this->getParcelas(Mage::getSingleton('checkout/cart')->getQuote()->getGrandTotal()) as $parcela): ?>
+                                <?php echo "<option value='{$parcela->quantidade}'>{$parcela->label}</option>" ?>;
+                            <?php endforeach; ?>
+
+                        </select>
+                    </div>
+            
+                    <br>						
+
+                </div>
+            </div>
+
+        </li>
+
+        <input name="payment[check_formapagamento]" type="hidden" id="<?php echo $_code ?>_check_formapagamentocartao" value="cartaodecredito" />
+
+    <?php else: ?>
+        <?php $this->avisoConfiguracoes(); ?>
+        <script>
+            $('p_method_<?php echo $_code ?>').writeAttribute('checked', 'checked');
+            $('p_method_<?php echo $_code ?>').writeAttribute('disabled', 'disabled');
+        </script>
+    <?php endif; ?>
+
+</ul>
+
+<style>
+    #tablePay td { vertical-align:middle; }
+    #tablePay td { padding-bottom:2px; }
+    .cc_inactive { border:1px solid #F0F1F1; margin-right:2px; cursor:pointer; margin-bottom:8px; }
+    .cc_active { border:1px solid #CCCDCE; margin-right:2px; cursor:pointer; margin-bottom:8px; }
+    .cc_active.last { margin-right:0 !important; }
+    .cc_inactive.last { margin-right:0 !important; }
+    #tablePay .validation-advice { margin:0; }
+    #tablePay .input-text { width:230px; }
+    #tablePay td.label { padding-right:10px; }
+    #cc_bandeiras img{
+        width: 45px;
+        margin-right: 0 !important;
+    }
+    #cc_bandeiras img.cc_inactive{
+        border-color: #FFF;
+    }
+
+    #overlink{
+        text-decoration:none;
+        color:#f30;	
+    }
+    p{
+        clear:both;
+        margin:0;
+        padding:.5em 0;
+    }
+    pre{
+        display:block;
+        font:100% "Courier New", Courier, monospace;
+        padding:10px;
+        border:1px solid #bae2f0;
+        background:#e3f4f9;	
+        margin:.5em 0;
+        overflow:auto;
+        width:800px;
+    }
+
+    #tipsimg{border:none;word-wrap: normal; width: 250px;  }
+    #tipsul, #tipsli{
+        margin:0;
+        padding:0;
+    }
+    #tipsli{
+        list-style:none;
+        float:left;
+        display:inline;
+        margin-right:10px;
+    }
+
+    #preview{
+        position:absolute;
+        border:1px solid #ccc;
+        background:#333;
+        padding:5px;
+        display:none;
+        color:#fff;
+        width:249px;
+        line-height: 17px;
+    }
+
+    .form-list label {
+        float: none;
+    }
+
+</style>
+
+<script>
+    var VALOR_COMPRA;
+
+    function formatarNumero(rnum) {
+        return "R$ " + formatamoeda(Math.round(rnum * Math.pow(10, 2)) / Math.pow(10, 2));
+    }
+
+    function formatamoeda(num) {
+        x = 0;
+
+        if (num < 0) {
+            num = Math.abs(num);
+            x = 1;
+        }
+
+        if (isNaN(num))
+            num = "0";
+        cents = Math.floor((num * 100 + 0.5) % 100);
+
+        num = Math.floor((num * 100 + 0.5) / 100).toString();
+
+        if (cents < 10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+            num = num.substring(0, num.length - (4 * i + 3)) + '.'
+            + num.substring(num.length - (4 * i + 3));
+
+        ret = num + ',' + cents;
+
+        if (x == 1)
+            ret = ' - ' + ret;
+        return ret;
+
+    }
+
+    function removeOpcoes(selectbox) {
+        var i;
+        for (i = selectbox.options.length - 1; i >= 0; i--) {
+            selectbox.remove(i);
+        }
+    }
+
+    function selectBandeira29(bandeira) {
+
+        document.getElementById('akatuscartao_check_cartaobandeira').value = bandeira;
+
+        if (bandeira.length != 0) {
+
+            var newClass = "cc_inactive";
+            var children = document.getElementById('cc_bandeiras').getElementsByTagName('img');
+
+            for (var i = 0; i < children.length; i++) {
+
+                var id = children[i].getAttribute("id");
+                var currDivElem = document.getElementById(id);
+
+                if (id == bandeira) {
+                    currDivElem.setAttribute("class", "cc_active");
+                    currDivElem.setAttribute("className", "cc_active");
+                    jQuery(currDivElem).attr('src', jQuery(currDivElem).attr('src').replace('/cartoes/', '/cartoes-colorido/'));
+                } else {
+                    currDivElem.setAttribute("class", "cc_inactive");
+                    currDivElem.setAttribute("className", "cc_inactive");
+                    jQuery(currDivElem).attr('src', jQuery(currDivElem).attr('src').replace('/cartoes-colorido/', '/cartoes/'));
+                }
+
+            }
+        }
+    }
+
+    function imagePreview() {	
+        xOffset = 210;
+        yOffset = 20;
+
+        jQuery("a.preview").hover(function(e){
+            this.t = this.title;
+            this.title = "";	
+            var c = (this.t != "") ? "<br/>" + this.t : "";
+            jQuery("body").append("<p id='preview'><img src='"+ this.href +"' alt='Image preview' /><br /><b>Este é o código de segurança.</b><br /><br />Os cartôes <b>American Express</b>, possuem 4 dígitos e ficam na frente do cartão, acima do numero em alto-relevo. <br />Nos demais cartões, os números do código de segurança são impressos no verso. <br />Os cartões <b>Mastercard</b> e <b>Visa</b> possuem sempre 3 dígitos, sendo o código de segurança sempre os 3 últimos dígitos impressos no verso, conforme a imagem acima. </p>");					
+            jQuery("#preview")
+                .css("top",(e.pageY - xOffset) + "px")
+                .css("left",(e.pageX + yOffset) + "px")
+                .fadeIn("fast");						
+        },
+            function(){
+                this.title = this.t;	
+                jQuery("#preview").remove();
+            });	
+        jQuery("a.preview").mousemove(function(e){
+            jQuery("#preview")
+                .css("top",(e.pageY - xOffset) + "px")
+                .css("left",(e.pageX + yOffset) + "px");
+        });			
+    }
+
+    jQuery('input#akatuscartao_check_cartaocredito').keyup(function() {
+        var val = jQuery(this).val();
+        var first = val.charAt(0);
+        var second = val.charAt(1);
+        var third = val.charAt(2);
+        var fourth = val.charAt(3);
+
+        if( first == "4" ){ // Visa
+            jQuery('img#cc_cartao_visa').trigger('click');
+        }
+        else if( first == "5" ){ // Master
+            jQuery('img#cc_cartao_master').trigger('click');
+        }
+        else if( first == "6" ){ // Elo
+            jQuery('img#cc_cartao_elo').trigger('click');
+        }
+        else if( (first == "3") && ((second == "4") || (second == "7")) ){ // Amex
+            jQuery('img#cc_cartao_amex').trigger('click');
+        }
+        else if( (first == "3") && ((second != "4") && (second != "7")) ){ // DinersClub
+            jQuery('img#cc_cartao_diners').trigger('click');
+        }
+        else if( first == "" ){ // DinersClub
+            var children = document.getElementById('cc_bandeiras').getElementsByTagName('img');
+
+            for(var i = 0; i < children.length; i++) {
+                var id = children[i].getAttribute("id");
+                var currDivElem = document.getElementById(id);
+
+                jQuery(currDivElem).attr('src', jQuery(currDivElem).attr('src').replace('/cartoes/', '/cartoes-colorido/'));
+            }
+        }
+    });
+
+    function isCreditCard(CC){ 
+        var isCCard;
+
+        if (CC.length > 19)
+            isCCard = false;
+
+        var sum = 0; 
+        var mul = 1; 
+        var l = CC.length;
+        for (i = 0; i < l; i++) 
+        {
+            digit = CC.substring(l-i-1,l-i);
+            tproduct = parseInt(digit ,10)*mul;
+            if (tproduct >= 10)
+                sum += (tproduct % 10) + 1;
+            else
+                sum += tproduct;
+            if (mul == 1)
+                mul++;
+            else
+                mul--;
+        }
+        if ((sum % 10) == 0)
+            isCard = true;
+        else
+            isCard =false;
+
+        if(!isCard){
+            alert("O número do seu cartão de crédito foi digitado errado. Por favor verifique o número digitado antes de prosseguir com sua compra.");
+            jQuery('input#akatuscartao_check_cartaocredito').val('');
+            document.getElementById("akatuscartao_check_cartaocredito").focus();
+        }
+    }
+
+    function isCPF(CPF){ 
+        var isCPF = true;
+
+        var Soma;
+        var Resto;
+        Soma = 0;
+
+        if (CPF == "00000000000") isCPF = false;
+
+        for (i=1; i<=9; i++) Soma = Soma + parseInt(CPF.substring(i-1, i)) * (11 - i);
+        Resto = (Soma * 10) % 11;
+
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(CPF.substring(9, 10)) ) isCPF = false;
+
+        Soma = 0;
+        for (i = 1; i <= 10; i++) Soma = Soma + parseInt(CPF.substring(i-1, i)) * (12 - i);
+
+        Resto = (Soma * 10) % 11;
+        if ((Resto == 10) || (Resto == 11)) Resto = 0;
+        if (Resto != parseInt(CPF.substring(10, 11) ) ) isCPF = false;
+
+        if(!isCPF){
+            alert("CPF inválido. Por favor verifique o número digitado antes de prosseguir com sua compra.");
+            jQuery('input#akatuscartao_check_cpf').val('');
+            document.getElementById("akatuscartao_check_cpf").focus();
+        }
+    }
+</script>
+
+<script src="https://static.akatus.com/js/akatus.min.js"></script>
+
+<script>
+    jQuery(function() {
+        var formulario = document.getElementById('payment_form_akatuscartao');
+        var config = {
+            <?php if (Mage::getModel('akatusbase/pagar')->getConfigData('modo', Mage::app()->getStore()->getId()) === 'SANDBOX') { echo "sandbox: true,"; } ?> 
+            publicToken: '<?php echo Mage::getModel('akatusbase/pagar')->getConfigData('public_token', Mage::app()->getStore()->getId()) ?>'
+        };
+        Akatus.init(formulario, config);
+    });
+</script>

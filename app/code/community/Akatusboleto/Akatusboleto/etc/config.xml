@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Akatusboleto_Akatusboleto>
+            <version>0.1.1</version>
+        </Akatusboleto_Akatusboleto>
+    </modules>
+
+    <global>
+        <fieldsets>
+            <sales_convert_quote_payment>
+                <check_formapagamento>
+                    <to_order_payment>*</to_order_payment>
+                </check_formapagamento>
+            </sales_convert_quote_payment>
+        </fieldsets>
+
+        <sales>
+            <order>
+                <states>
+                    <pending_payment>
+                        <visible_on_front>1</visible_on_front>
+                    </pending_payment>
+                </states>
+            </order>
+        </sales>
+
+        <blocks>
+            <akatusboleto>
+                <class>Akatusboleto_Akatusboleto_Block</class>
+            </akatusboleto>
+        </blocks>
+
+        <models>
+            <akatusboleto>
+                <class>Akatusboleto_Akatusboleto_Model</class>
+            </akatusboleto>
+        </models>
+
+        <resources>
+            <akatusboleto_setup>
+                <setup>
+                    <module>Akatusboleto_Akatusboleto</module>
+                    <class>Akatusboleto_Akatusboleto_Model_Resource_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </akatusboleto_setup>
+            <akatusboleto_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </akatusboleto_write>
+            <akatusboleto_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </akatusboleto_read>
+        </resources>
+
+        <helpers>
+            <class>Akatusboleto_Akatusboleto_Helper</class>
+        </helpers>        
+
+    </global>
+
+    <default>
+        <payment>
+            <akatusboleto>
+                <active>0</active>
+                <modo>SANDBOX</modo>
+                <model>akatusboleto/pagar</model>
+                <order_status>pending</order_status>
+                <title>Boleto</title>
+                <cctypes>AE,VI,MC</cctypes>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+            </akatusboleto>
+        </payment>
+    </default>
+
+</config>

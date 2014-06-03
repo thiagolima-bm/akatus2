@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <modules>
+        <DiegoSouza_CheckoutSimplificado>
+            <active>true</active>
+            <codePool>local</codePool>
+        </DiegoSouza_CheckoutSimplificado>
+    </modules>
+</config>

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<config>
+
+    <modules>
+        <Akatusbase_Akatusbase>
+            <version>0.1.0</version>
+        </Akatusbase_Akatusbase>
+    </modules>
+
+    <global>
+        <blocks>
+            <akatusbase>
+                <class>Akatusbase_Akatusbase_Block</class>
+            </akatusbase>
+        </blocks>
+
+        <models>
+            <akatusbase>
+                <class>Akatusbase_Akatusbase_Model</class>
+            </akatusbase>
+        </models>
+
+        <resources>
+            <akatusbase_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </akatusbase_write>
+            <akatusbase_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </akatusbase_read>
+        </resources>
+
+        <helpers>
+            <class>Akatusbase_Akatusbase_Helper</class>
+        </helpers>        
+    </global>
+
+    <default>
+        <payment>
+            <akatusbase>
+                <active>1</active>
+                <modo>SANDBOX</modo>
+                <order_status>pending</order_status>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+            </akatusbase>
+        </payment>
+    </default>
+
+    <admin>
+        <routers>
+            <akatus>
+                <use>admin</use>
+                <args>
+                    <module>Akatusbase_Akatusbase</module>
+                    <frontName>akatusbase</frontName>
+                </args>
+            </akatus>
+        </routers>
+    </admin>
+
+</config>

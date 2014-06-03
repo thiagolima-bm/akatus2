@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Akatuscartao_Akatuscartao>
+            <version>0.1.1</version>
+        </Akatuscartao_Akatuscartao>
+    </modules>
+
+    <global>
+        <fieldsets>
+            <sales_convert_quote_payment>
+                <check_cartaobandeira>
+                    <to_order_payment>*</to_order_payment>
+                </check_cartaobandeira>
+                <check_nome>
+                    <to_order_payment>*</to_order_payment>
+                </check_nome>
+                <check_cpf>
+                    <to_order_payment>*</to_order_payment>
+                </check_cpf>
+                <check_numerocartao>
+                    <to_order_payment>*</to_order_payment>
+                </check_numerocartao>
+                <check_expiracaomes>
+                    <to_order_payment>*</to_order_payment>
+                </check_expiracaomes>
+                <check_expiracaoano>
+                    <to_order_payment>*</to_order_payment>
+                </check_expiracaoano>
+                <check_codseguranca>
+                    <to_order_payment>*</to_order_payment>
+                </check_codseguranca>
+                <check_parcelamento>
+                    <to_order_payment>*</to_order_payment>
+                </check_parcelamento>    		 	
+                <check_formapagamento>
+                    <to_order_payment>*</to_order_payment>
+                </check_formapagamento>
+            </sales_convert_quote_payment>
+        </fieldsets>
+
+        <sales>
+            <order>
+                <states>
+                    <pending_payment>
+                        <visible_on_front>1</visible_on_front>
+                    </pending_payment>
+                </states>
+            </order>
+        </sales>
+
+        <blocks>
+            <akatuscartao>
+                <class>Akatuscartao_Akatuscartao_Block</class>
+            </akatuscartao>
+        </blocks>
+
+
+        <models>
+            <akatuscartao>
+                <class>Akatuscartao_Akatuscartao_Model</class>
+            </akatuscartao>
+        </models>
+
+        <resources>
+            <akatuscartao_setup>
+                <setup>
+                    <module>Akatuscartao_Akatuscartao</module>
+                    <class>Akatuscartao_Akatuscartao_Model_Resource_Mysql4_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </akatuscartao_setup>
+            <akatuscartao_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </akatuscartao_write>
+            <akatuscartao_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </akatuscartao_read>
+        </resources>
+    </global>
+
+
+    <default>
+        <payment>
+            <akatuscartao>
+                <active>0</active>
+                <modo>SANDBOX</modo>
+                <numero_maximo_parcelas>12</numero_maximo_parcelas>
+                <model>akatuscartao/pagar</model>
+                <order_status>pending</order_status>
+                <title>Cartão de Crédito</title>
+                <cctypes>AE,VI,MC</cctypes>
+                <payment_action>authorize</payment_action>
+                <allowspecific>0</allowspecific>
+            </akatuscartao>
+        </payment>
+    </default>
+
+</config>

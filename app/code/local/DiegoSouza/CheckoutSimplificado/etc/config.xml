@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <modules>
+        <DiegoSouza_CheckoutSimplificado>
+            <version>0.0.6</version>
+        </DiegoSouza_CheckoutSimplificado>
+    </modules>
+
+    <admin>
+        <fieldsets>
+            <customer_dataflow>
+                <rg><billing>1</billing><shipping>1</shipping></rg>
+                <celular><billing>1</billing><shipping>1</shipping></celular>
+            </customer_dataflow>
+        </fieldsets>
+    </admin>
+
+    <global>
+
+        <resources>
+            <checkoutsimplificado_setup>
+                <setup>
+                    <module>DiegoSouza_CheckoutSimplificado</module>
+                    <class>Mage_Customer_Model_Entity_Setup</class>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </checkoutsimplificado_setup>
+            <checkoutsimplificado_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </checkoutsimplificado_write>
+            <checkoutsimplificado_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </checkoutsimplificado_read>
+        </resources>
+
+        <fieldsets>
+            <sales_copy_order_billing_address>
+                <rg><to_order>*</to_order></rg>
+                <celular><to_order>*</to_order></celular>
+            </sales_copy_order_billing_address>
+
+            <sales_copy_order_shipping_address>
+                <rg><to_order>*</to_order></rg>
+                <celular><to_order>*</to_order></celular>
+            </sales_copy_order_shipping_address>
+
+            <sales_convert_quote_address>
+                <rg><to_order_address>*</to_order_address><to_customer_address>*</to_customer_address></rg>
+                <celular><to_order_address>*</to_order_address><to_customer_address>*</to_customer_address></celular>
+            </sales_convert_quote_address>
+
+            <sales_convert_order_address>
+                <rg><to_quote_address>*</to_quote_address></rg>
+                <celular><to_quote_address>*</to_quote_address></celular>
+            </sales_convert_order_address>
+
+            <customer_address>
+                <rg><to_quote_address>*</to_quote_address></rg>
+                <celular><to_quote_address>*</to_quote_address></celular>
+            </customer_address>
+
+            <checkout_onepage_billing>
+                <rg><to_customer>*</to_customer></rg>
+                <celular><to_customer>*</to_customer></celular>
+            </checkout_onepage_billing>
+        </fieldsets>
+
+        <models>
+            <checkoutsimplificado>
+                <class>DiegoSouza_CheckoutSimplificado_Model</class>
+            </checkoutsimplificado>
+            <checkoutsimplificado_adminhtml>
+                <class>DiegoSouza_CheckoutSimplificado_Adminhtml_Model</class>
+            </checkoutsimplificado_adminhtml>
+        </models>
+
+        <blocks>
+            <checkout>
+                <rewrite>
+                    <links>DiegoSouza_CheckoutSimplificado_Block_Links</links>
+                </rewrite>
+            </checkout>
+            <checkoutsimplificado>
+                <class>DiegoSouza_CheckoutSimplificado_Block</class>
+            </checkoutsimplificado>
+        </blocks>
+
+        <helpers>
+            <checkout>
+                <rewrite>
+                    <url>DiegoSouza_CheckoutSimplificado_Helper_Url</url>
+                </rewrite>
+            </checkout>
+            <checkoutsimplificado>
+                <class>DiegoSouza_CheckoutSimplificado_Helper</class>
+            </checkoutsimplificado>
+        </helpers>
+
+    </global>
+
+    <frontend>
+
+        <routers>
+            <checkoutsimplificado>
+                <use>standard</use>
+                <args>
+                    <module>DiegoSouza_CheckoutSimplificado</module>
+                    <frontName>checkoutsimplificado</frontName>
+                </args>
+            </checkoutsimplificado>
+        </routers>
+
+        <translate>
+            <modules>
+                <DiegoSouza_CheckoutSimplificado>
+                    <files>
+                        <default>DiegoSouza_CheckoutSimplificado.csv</default>
+                    </files>
+                </DiegoSouza_CheckoutSimplificado>
+            </modules>
+        </translate>
+
+        <layout>
+            <updates>
+                <checkoutsimplificado>
+                    <file>checkoutsimplificado.xml</file>
+                </checkoutsimplificado>
+            </updates>
+        </layout>
+
+        <events>
+
+            <sales_model_service_quote_submit_after>
+                <observers>
+                    <checkoutsimplificado>
+                        <type>model</type>
+                        <class>checkoutsimplificado/observer</class>
+                        <method>removeHistoryComment</method>
+                    </checkoutsimplificado>
+                </observers>
+            </sales_model_service_quote_submit_after>
+
+            <sales_model_service_quote_submit_before>
+                <observers>
+                    <checkoutsimplificado>
+                        <type>model</type>
+                        <class>checkoutsimplificado/observer</class>
+                        <method>addHistoryComment</method>
+                    </checkoutsimplificado>
+                </observers>
+            </sales_model_service_quote_submit_before>
+
+        </events>
+    </frontend>
+
+    <adminhtml>
+
+        <translate>
+            <modules>
+                <IWD_checkoutsimplificado>
+                    <files>
+                        <default>DiegoSouza_CheckoutSimplificado.csv</default>
+                    </files>
+                </IWD_checkoutsimplificado>
+            </modules>
+        </translate>
+
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <checkoutsimplificado translate="title" module="checkoutsimplificado">
+                                            <title>One Page Checkout Section</title>
+                                        </checkoutsimplificado>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+
+    <default>
+
+        <checkoutsimplificado>
+            <general>
+                <enabled>1</enabled>
+                <title>Finalize a sua compra</title>
+                <taxvat>1</taxvat>
+                <payment_method>akatus</payment_method>
+                <country>BR</country>
+            </general>
+
+            <agreements>
+                <enabled>0</enabled>
+                <output>minimal</output>
+            </agreements>
+
+            <geo_ip>
+                <country>0</country>
+                <country_file></country_file>
+                <city>0</city>
+                <city_file></city_file>
+            </geo_ip>
+        </checkoutsimplificado>
+
+    </default>
+
+    <admin>
+        <routers>
+            <checkoutsimplificado>
+                <use>admin</use>
+                <args>
+                    <module>DiegoSouza_CheckoutSimplificado</module>
+                    <frontName>checkoutsimplificado</frontName>
+                </args>
+            </checkoutsimplificado>
+        </routers>
+    </admin>
+
+</config>

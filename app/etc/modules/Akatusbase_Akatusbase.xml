@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config>	
+    <modules>
+        <Akatusbase_Akatusbase>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Payment/>
+            </depends>
+        </Akatusbase_Akatusbase>               
+    </modules>
+</config>

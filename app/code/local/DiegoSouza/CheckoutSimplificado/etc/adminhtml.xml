@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <acl>
+        <resources>
+            <admin>
+                <children>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <checkoutsimplificado translate="title" module="checkoutsimplificado">
+                                        <title>Projeto One Step Checkout Simplificado</title>
+                                    </checkoutsimplificado>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>
