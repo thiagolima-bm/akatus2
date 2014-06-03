@@ -1,3 +1,7 @@
-app								app
+app/code						app/code
+app/etc							app/etc
+app/locale						app/locale
+app/design/frontent/base		design/frontent/base
+app/design/frontent/default		design/frontent/base
 skin/frontend/base				skin/frontend/base
 skin/frontend/default			skin/frontend/base
